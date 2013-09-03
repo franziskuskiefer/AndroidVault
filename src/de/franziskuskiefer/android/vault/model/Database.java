@@ -32,8 +32,6 @@ public class Database {
 	
 	private void initDB(String key) {
 		this.database = SQLiteDatabase.openOrCreateDatabase(databaseFile, key, null);
-		// FIXME: only for testing -> drop tables every start
-//		database.execSQL("DROP TABLE passwords");
 		Log.d("Database", "opened database");
 	}
 
@@ -47,7 +45,7 @@ public class Database {
 	}
 	
 	public void createTable(String... args) {
-		Log.d("Database", "Create table if not exists");
+		Log.d("Database", "Create table if not existent");
 		String vals = "(_id INTEGER PRIMARY KEY, ";
 		int i = 1;
 		for (; i < args.length-1; i++) {
@@ -56,16 +54,6 @@ public class Database {
 		vals += args[i] + ")";
 		database.execSQL("create table if not exists "+args[0]+vals);
 	}
-	
-//	public void insert(String... args) {
-//		String vals = "(";
-//		int i = 1;
-//		for (; i < args.length-1; i++) {
-//			vals += args[i] + ", ";
-//		}
-//		vals += args[i] + ")";
-//		database.execSQL("insert into "+args[0] + " values " +vals);
-//	}
 	
 	public void insert(String tableName, String[] scheme, String[] args) {
 		if (scheme.length == args.length){
@@ -82,13 +70,13 @@ public class Database {
 	}
 	
 	public void printTable(String name){
+		printScheme(name);
+		printContent(name);
+	}
+
+	private void printContent(String name) {
 		Cursor result = database.rawQuery("SELECT * FROM "+name, new String[]{});
 		Log.d("Database", "result from table: "+name);
-		Cursor scheme = database.rawQuery("PRAGMA table_info("+name+")", null);
-		Log.d("Database", "scheme: ");
-		while(scheme.moveToNext()){
-			Log.d("Database", scheme.getString(1));
-		}
 		int nCol = result.getColumnCount();
 		while (result.moveToNext()) {
 			for (int i = 0; i < nCol; i++) {
@@ -96,6 +84,14 @@ public class Database {
 			}
 		}
 		result.close();
+	}
+
+	public void printScheme(String name){
+		Cursor scheme = database.rawQuery("PRAGMA table_info("+name+")", null);
+		Log.d("Database", "scheme: ");
+		while(scheme.moveToNext()){
+			Log.d("Database", scheme.getString(1));
+		}
 	}
 	
 	@Override
@@ -106,21 +102,6 @@ public class Database {
 		this.database.close();
 	}
 
-//	public Vector<String> getEntries(String table) {
-//		Log.d("Database", "Getting entries from table '"+table+"'");
-//		Cursor entries = database.rawQuery("SELECT * FROM "+table, new String[]{});
-//		Log.d("Database", "Count: "+entries.getCount());
-//		Vector<String> result = new Vector<String>();
-//		while (entries.moveToNext()) {
-//			Log.d("Database", "Entry" + entries.getString(0) + " - "+entries.getString(1));
-//			result.add(entries.getString(0));
-//			result.add(entries.getString(1));
-//		}
-//		entries.close();
-//		
-//		return result;
-//	}
-	
 	public Table getTable(String name){
 		Log.d("Database", "Getting entries from table '"+name+"'");
 		Cursor entries = database.rawQuery("SELECT * FROM "+name, new String[]{});

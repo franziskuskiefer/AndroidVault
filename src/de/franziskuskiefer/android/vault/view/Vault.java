@@ -16,10 +16,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import de.franziskuskiefer.android.vault.KeyManagerActivity.DummySectionFragment;
 import de.franziskuskiefer.android.vault.R;
 import de.franziskuskiefer.android.vault.controller.DatabaseController;
 
+/**
+ * The main applicatoin.
+ * 
+ * @author Franziskus Kiefer
+ *
+ */
 public class Vault extends FragmentActivity implements NoticeDialogListener {
 
 	private DatabaseController dbController;
@@ -50,7 +55,7 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 		try{
 			openDB(key);
 
-			setContentView(R.layout.activity_key_manager);
+			setContentView(R.layout.activity_vault);
 			
 			// Create the adapter that will return a fragment for each of the three
 			// primary sections of the app.
@@ -120,17 +125,12 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 		
 		@Override
 		public Fragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
-			
 			if (categories.size() == 0){
 				Fragment fragment = new EmptyFragment();
 				return fragment;
 			} else {
-				Log.d("Vault", "getItem Position: "+position);
+				Log.d("Vault", "SectionsPagerAdapter getItem Position: "+position);
 				fragment = new TableFragment();
-				Log.d("Vault", "getItem Tag:ID := "+fragment.getTag()+":"+fragment.getId());
 				
 				Bundle args = new Bundle();
 				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
@@ -195,14 +195,8 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 			// store passwords
 			dbController.addPasswordEntry(pwd, user); 
 			
-			// FIXME: refresh view with new content
+			// XXX: refresh view with new content (actually, we get a new cursor)
 			mSectionsPagerAdapter.notifyDataSetChanged();
-//			String x = makeFragmentName(R.id.pager, 1);
-//			Fragment item = mSectionsPagerAdapter.getItem(0);
-//			android.app.Fragment frag = getFragmentManager().findFragmentByTag(x);
-//			ListView view = (ListView)item.getView();
-//			CursorAdapter adapter = (CursorAdapter)view.getAdapter();
-//			adapter.notifyDataSetChanged();
 			
 		} else {
 			Toast.makeText(getApplicationContext(), "Sorry, not implemented yet!", Toast.LENGTH_SHORT).show();
@@ -224,16 +218,9 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 		Log.d("Vault", "onResume");
 	}
 	
-	private String makeFragmentName(int viewId, int position) {
-		String tag = "android:switcher:" + viewId + ":" + position;
-		Log.d("Vault", "Tag: "+tag);
-		return tag;
-	}
-
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		
+		// Nothing to do here yet ...
 	}
 	
 	/**

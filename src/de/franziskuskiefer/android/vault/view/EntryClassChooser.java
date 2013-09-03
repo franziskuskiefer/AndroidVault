@@ -8,6 +8,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import de.franziskuskiefer.android.vault.R;
 
+/**
+ * {@link DialogFragment} to choose the class of the new entry.
+ * This fragment is shown when the "New Entry" menu is opened.
+ * 
+ * @author Franziskus Kiefer
+ *
+ */
 public class EntryClassChooser extends DialogFragment {
 
 	// selected entry
@@ -46,5 +53,5 @@ public class EntryClassChooser extends DialogFragment {
 	public int getSelected() {
 		return selected;
 	}
-	
+
 }

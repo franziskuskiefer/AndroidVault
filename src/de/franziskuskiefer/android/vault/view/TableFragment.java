@@ -36,15 +36,10 @@ public class TableFragment extends Fragment {
 		// Inflate the layout for this fragment
 		String category = getArguments().getString("category");
 		if (category.equalsIgnoreCase("passwords")){
-			View fuuu = View.inflate(getActivity(), R.layout.test_list, null);
-			Log.d("Vault", "Create Table Fragment");
-			
-			list = (ListView) fuuu.findViewById(R.id.lv);
-//			list = new ListView(getActivity());
-//			View header = View.inflate(getActivity(), R.layout.password_list_view, null);
-//			list.addHeaderView(header, null, false);
+			View frag = View.inflate(getActivity(), R.layout.pwd_list, null);
+			list = (ListView) frag.findViewById(R.id.lv);
 
-			// query db
+			// query db in its own thread
 			new Handler().post(new Runnable() {
 				@Override
 				public void run() {
@@ -54,9 +49,10 @@ public class TableFragment extends Fragment {
 				}
 			});
 
-			return fuuu;
+			Log.d("Vault", "Create Table Fragment");
+			return frag;
 		} else {
-			View view = inflater.inflate(R.layout.test_fragment, container, false);
+			View view = inflater.inflate(R.layout.dummy_table_fragment, container, false);
 			((TextView)view.findViewById(R.id.key_string)).setText("lülala");
 			return view;
 		}
@@ -69,10 +65,8 @@ public class TableFragment extends Fragment {
 	    // Make sure that we are currently visible
 	    if (this.isVisible()) {
 	    	Log.d("TableFragment", "Visible again ... do refresh");
-	        // If we are becoming invisible, then...
 	        if (!isVisibleToUser) {
 	            Log.d("TableFragment", "Not visible anymore ...");
-	            // TODO stop audio playback
 	        }
 	    }
 	}

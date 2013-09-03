@@ -10,10 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+/**
+ * Custom {@link CursorAdapter} to display password tables of the form:
+ * FIXME: Note | Username
+ * 
+ * @author Franziskus Kiefer
+ *
+ */
 public class PasswordTableAdapter extends CursorAdapter {
 
 	LayoutInflater inflater = null;
-	
+
 	public PasswordTableAdapter(Context context, Cursor c, boolean autoRequery) {
 		super(context, c, autoRequery);
 		this.inflater = LayoutInflater.from(context);
@@ -28,15 +35,12 @@ public class PasswordTableAdapter extends CursorAdapter {
 		((TextView)arg0.findViewById(R.id.contextfield)).setText("ToDo");
 		((TextView)arg0.findViewById(R.id.usernamefield)).setText(arg2.getString(1));
 		((TextView)arg0.findViewById(R.id.passwordfield)).setText(arg2.getString(2));
-		
 	}
 
 	@Override
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
 		this.inflater = LayoutInflater.from(arg0);
-		
 		Log.d("Database", "Created newView in PasswordTableAdapter");
-		
 		return this.inflater.inflate(R.layout.pwd_table_list_item, null);
 	}
 

@@ -77,10 +77,6 @@ public class DatabaseController {
 			return PASSWORD_DATABASE;
 		}
 
-//		public void addPasswordEntry(Database db, String user, String pwd){
-//			db.insert(PASSWORD_DATABASE, user, pwd);
-//		}
-		
 		public void addPasswordEntry(Database db, String user, String pwd){
 			db.insert(PASSWORD_DATABASE, new String[]{USERNAME, PASSWORD}, new String[]{user, pwd});
 		}

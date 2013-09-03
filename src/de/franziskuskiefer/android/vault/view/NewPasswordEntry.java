@@ -11,6 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import de.franziskuskiefer.android.vault.R;
 
+/**
+ * {@link DialogFragment} to enter a new password entry.
+ * This fragment is shown when the "Password" entry type is chosen in {@link EntryClassChooser}.
+ * 
+ * @author Franziskus Kiefer
+ *
+ */
 public class NewPasswordEntry extends DialogFragment {
 
 	private String pwd, username;

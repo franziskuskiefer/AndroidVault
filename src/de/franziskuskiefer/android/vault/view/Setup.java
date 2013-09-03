@@ -78,14 +78,12 @@ public class Setup extends Activity {
 		switch (requestCode) {
 			case ZBAR_QR_SCANNER_REQUEST:
 				if (resultCode == RESULT_OK) {
-					String scannedString = "Scan Result = " + data.getStringExtra(ZBarConstants.SCAN_RESULT);
-					onUnlock(scannedString);
-//					Toast.makeText(this, scannedString , Toast.LENGTH_SHORT).show();
+					onUnlock(data.getStringExtra(ZBarConstants.SCAN_RESULT));
 				} else if(resultCode == RESULT_CANCELED && data != null) {
 					String error = data.getStringExtra(ZBarConstants.ERROR_INFO);
 					if(!TextUtils.isEmpty(error)) {
 						Log.d(INPUT_SERVICE, "Scanning Error:\n"+error);
-//						Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+						Toast.makeText(this, "Sorry, something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
 					}
 				}
 				break;

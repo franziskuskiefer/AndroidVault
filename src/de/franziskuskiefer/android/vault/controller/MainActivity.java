@@ -11,26 +11,14 @@ import de.franziskuskiefer.android.vault.view.Vault;
 
 public class MainActivity extends Activity implements Util, OnSharedPreferenceChangeListener{
 
-	private SharedPreferences packagePrefs;
-	private DatabaseController dbController;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		packagePrefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-		packagePrefs.registerOnSharedPreferenceChangeListener(this);
-
 		// start vault or setup
 		if (EMULATOR_TESTING){ // or testing
-//			openDB(EMULATOR_TEST_KEY);
 			Intent myIntent = new Intent(getBaseContext(), Vault.class);
 			myIntent.putExtra("key", EMULATOR_TEST_KEY);
-			startActivity(myIntent);
-		} else if (packagePrefs.contains("key")) { // FIXME: get real key first!
-//			openDB(EMULATOR_TEST_KEY);
-			Intent myIntent = new Intent(getBaseContext(), Vault.class);
-			myIntent.putExtra("key", TEST_KEY);
 			startActivity(myIntent);
 		} else {
 			Intent myIntent = new Intent(getBaseContext(), Setup.class);
