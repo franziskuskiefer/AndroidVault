@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Vault</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="scan_key">Scan Key</string>
+    <string name="create_new_vault">Open Vault</string>
+    <string name="setup_url">Go to http://franziskuskiefer.de/VaultKey to generate a new key if needed.</string>
+    <string name="emptyfragmentmessage">The database is empty. Select a category from the menu and add a new entry to get started.</string>
+    <string name="menuNewEntry">New Entry</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="create">Create</string>
+    <string name="choose_category">Choose Entry-Category</string>
+
+    <string-array name="categories_array">
+        <item>Password</item>
+        <item>PGP Key</item>
+    </string-array>
+
+    <string name="context">Context</string>
+    <string name="reset_db">Reset DB</string>
+
+</resources>
