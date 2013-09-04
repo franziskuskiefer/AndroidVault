@@ -1,5 +1,6 @@
 package de.franziskuskiefer.android.vault.view;
 
+import net.sqlcipher.CrossProcessCursorWrapper;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.franziskuskiefer.android.vault.R;
@@ -46,6 +49,27 @@ public class TableFragment extends Fragment {
 					Cursor c = ((Vault)getActivity()).getDBController().getCursor("passwords");
 					passwordTableAdapter = new PasswordTableAdapter(getActivity(), c, true);
 					list.setAdapter(passwordTableAdapter);
+//					list.setOnItemClickListener(passwordTableAdapter);
+					list.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+							CrossProcessCursorWrapper clickedRow = (CrossProcessCursorWrapper) list.getItemAtPosition(arg2);
+							String username = clickedRow.getString(clickedRow.getColumnIndex("username"));
+							String password = clickedRow.getString(clickedRow.getColumnIndex("password"));
+							
+							Bundle pwdDialog = new Bundle();
+							pwdDialog.putString("note", "This is my cool note...");
+							pwdDialog.putString("username", username);
+							pwdDialog.putString("password", password);
+							PasswordInfo passwordInfo = new PasswordInfo();
+							passwordInfo.setArguments(pwdDialog);
+							passwordInfo.show(getActivity().getSupportFragmentManager(), "PasswordInfo");
+							
+							Log.d("Vault", "clickedRow.username: "+username);
+							Log.d("Vault", "clickedRow.pwd: "+password);
+						}
+					});
 				}
 			});
 

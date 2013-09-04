@@ -8,26 +8,24 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 import de.franziskuskiefer.android.vault.R;
 
 /**
- * {@link DialogFragment} to enter a new password entry.
- * This fragment is shown when the "Password" entry type is chosen in {@link EntryClassChooser}.
+ * {@link DialogFragment} to display a password entry.
+ * This fragment is shown when clicked on an entry in the password list.
  * 
  * @author Franziskus Kiefer
  *
  */
-public class NewPasswordEntry extends DialogFragment {
+public class PasswordInfo extends DialogFragment implements OnClickListener {
 
-	private String pwd, username;
-	
-    // Use this instance of the interface to deliver action events
+    private static final String HIDDEN = "**********";
+	// Use this instance of the interface to deliver action events
     NoticeDialogListener mListener;
-
-	private EditText pwdField;
-
-	private EditText usernameField;
+	private String pwd;
+	private boolean shown = false;
     
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -51,17 +49,20 @@ public class NewPasswordEntry extends DialogFragment {
 	    
 	    // Inflate and set the layout for the dialog
 	    // Pass null as the parent view because its going in the dialog layout
-	    View view = inflater.inflate(R.layout.dialog_new_entry, null);
-	    pwdField = (EditText)view.findViewById(R.id.password);
-	    usernameField = (EditText)view.findViewById(R.id.username);
+	    View view = inflater.inflate(R.layout.password_info, null);
+	    
+	    ((TextView)view.findViewById(R.id.note)).setText(getArguments().getString("note"));
+		((TextView)view.findViewById(R.id.username)).setText(getArguments().getString("username"));
+	    this.pwd = getArguments().getString("password");
+	    (((TextView)view.findViewById(R.id.password))).setText(HIDDEN);
+	    (((TextView)view.findViewById(R.id.password))).setOnClickListener(this);
+	    
 		builder.setView(view)
 	    // Add action buttons
-	           .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+	           .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
 	               @Override
 	               public void onClick(DialogInterface dialog, int id) {
-	            	   pwd = pwdField.getText().toString();
-	            	   username = usernameField.getText().toString();
-	            	   mListener.onDialogPositiveClick(NewPasswordEntry.this);
+	            	   mListener.onDialogPositiveClick(PasswordInfo.this);
 	               }
 	           })
 	           .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -69,16 +70,18 @@ public class NewPasswordEntry extends DialogFragment {
 	                   getDialog().cancel();
 	               }
 	           })
-	           .setTitle("Store new Password");      
+	           .setTitle("Password Info");      
 	    return builder.create();
 	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public String getPwd() {
-		return pwd;
+
+	@Override
+	public void onClick(View v) {
+		if (shown){
+			(((TextView)v.findViewById(R.id.password))).setText(HIDDEN);
+		} else {
+			(((TextView)v.findViewById(R.id.password))).setText(this.pwd);
+		}
+		shown = !shown;
 	}
 	
 }

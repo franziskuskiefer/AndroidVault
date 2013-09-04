@@ -25,10 +25,11 @@
     <LinearLayout
         android:id="@+id/header_text"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:background="#ff33b5e5" >
 
         <TextView
             android:layout_width="1pt"
@@ -36,7 +37,16 @@
             android:layout_weight="2"
             android:gravity="center"
             android:padding="3dip"
-            android:text="@string/context" />
+            android:text="@string/context"
+            android:textStyle="bold"
+            android:textColor="#ff000000" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dip"
+            android:layout_marginTop="0dip"
+            android:background="?android:attr/dividerVertical" />
 
         <TextView
             android:layout_width="1pt"
@@ -44,15 +54,9 @@
             android:layout_weight="2"
             android:gravity="center"
             android:padding="3dip"
-            android:text="@string/username" />
-
-        <TextView
-            android:layout_width="1pt"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:padding="3dip"
-            android:text="@string/password" />
+            android:text="@string/username"
+            android:textStyle="bold"
+            android:textColor="#ff000000" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package de.franziskuskiefer.android.vault.model;
 
 import java.io.File;
+import java.util.Arrays;
 
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -65,6 +66,7 @@ public class Database {
 			}
 			schema += scheme[i] + ") ";
 			qmarks += "?) ";
+			Log.d("Database", "insert into "+ tableName + schema +" values " + qmarks+"\nARGS: "+Arrays.toString(args));
 			database.execSQL("insert into "+ tableName + schema +" values " + qmarks, args);
 		}
 	}

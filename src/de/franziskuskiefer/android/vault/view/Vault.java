@@ -3,9 +3,9 @@ package de.franziskuskiefer.android.vault.view;
 import java.util.Vector;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -94,7 +94,7 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 		
 		switch (item.getItemId()) {
 			case R.id.menuNewEntry:
-				new EntryClassChooser().show(getFragmentManager(), "CategoryChooser");
+				new EntryClassChooser().show(getSupportFragmentManager(), "CategoryChooser");
 				break;
 	
 			default:
@@ -178,7 +178,7 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 			// FIXME: make nicer ...
 			switch (selected) {
 				case 0: // password
-					new NewPasswordEntry().show(getFragmentManager(), "NewPwdEntry");
+					new NewPasswordEntry().show(getSupportFragmentManager(), "NewPwdEntry");
 					break;
 				case 1: // PGP
 					Toast.makeText(getApplicationContext(), "Sorry, not implemented yet!", Toast.LENGTH_SHORT).show();
@@ -193,7 +193,7 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 			Log.d("Vault", "username: "+user);
 			
 			// store passwords
-			dbController.addPasswordEntry(pwd, user); 
+			dbController.addPasswordEntry(user, pwd); 
 			
 			// XXX: refresh view with new content (actually, we get a new cursor)
 			mSectionsPagerAdapter.notifyDataSetChanged();
