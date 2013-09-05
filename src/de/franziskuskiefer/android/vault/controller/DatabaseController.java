@@ -39,8 +39,8 @@ public class DatabaseController {
 		tables.add(pwdTable.getName());
 	}
 
-	public void addPasswordEntry(String user, String pwd){
-		pwdTable.addPasswordEntry(this.db, user, pwd);
+	public void addPasswordEntry(String note, String user, String pwd){
+		pwdTable.addPasswordEntry(this.db, note, user, pwd);
 	}
 	
 	public Table getEntries(String table){
@@ -60,12 +60,13 @@ public class DatabaseController {
 	 */
 	private class PasswordDatabaseController implements Util {
 		
+		private static final String NOTE = "note";
 		private static final String USERNAME = "username";
 		private static final String PASSWORD = "password";
 		private static final String PASSWORD_DATABASE = "passwords";
 		
 		public void createTable(Database db) {
-			db.createTable(PASSWORD_DATABASE, USERNAME, PASSWORD);
+			db.createTable(PASSWORD_DATABASE, NOTE, USERNAME, PASSWORD);
 			db.printTable(PASSWORD_DATABASE);
 		}
 
@@ -77,8 +78,8 @@ public class DatabaseController {
 			return PASSWORD_DATABASE;
 		}
 
-		public void addPasswordEntry(Database db, String user, String pwd){
-			db.insert(PASSWORD_DATABASE, new String[]{USERNAME, PASSWORD}, new String[]{user, pwd});
+		public void addPasswordEntry(Database db, String note, String user, String pwd){
+			db.insert(PASSWORD_DATABASE, new String[]{NOTE, USERNAME, PASSWORD}, new String[]{note, user, pwd});
 		}
 
 		public Cursor getCursor() {

@@ -24,5 +24,6 @@
 
     <string name="context">Context</string>
     <string name="reset_db">Reset DB</string>
+    <string name="note">Where do you use this?</string>
 
 </resources>

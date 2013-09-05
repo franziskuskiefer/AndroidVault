@@ -57,9 +57,10 @@ public class TableFragment extends Fragment {
 							CrossProcessCursorWrapper clickedRow = (CrossProcessCursorWrapper) list.getItemAtPosition(arg2);
 							String username = clickedRow.getString(clickedRow.getColumnIndex("username"));
 							String password = clickedRow.getString(clickedRow.getColumnIndex("password"));
+							String note = clickedRow.getString(clickedRow.getColumnIndex("note"));
 							
 							Bundle pwdDialog = new Bundle();
-							pwdDialog.putString("note", "This is my cool note...");
+							pwdDialog.putString("note", note);
 							pwdDialog.putString("username", username);
 							pwdDialog.putString("password", password);
 							PasswordInfo passwordInfo = new PasswordInfo();

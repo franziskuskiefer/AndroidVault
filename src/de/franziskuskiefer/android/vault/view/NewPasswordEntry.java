@@ -20,14 +20,12 @@ import de.franziskuskiefer.android.vault.R;
  */
 public class NewPasswordEntry extends DialogFragment {
 
-	private String pwd, username;
+	private String pwd, username, note;
 	
     // Use this instance of the interface to deliver action events
     NoticeDialogListener mListener;
 
-	private EditText pwdField;
-
-	private EditText usernameField;
+	private EditText pwdField, usernameField, noteField;
     
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -54,6 +52,7 @@ public class NewPasswordEntry extends DialogFragment {
 	    View view = inflater.inflate(R.layout.dialog_new_entry, null);
 	    pwdField = (EditText)view.findViewById(R.id.password);
 	    usernameField = (EditText)view.findViewById(R.id.username);
+	    noteField = (EditText)view.findViewById(R.id.note);
 		builder.setView(view)
 	    // Add action buttons
 	           .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
@@ -61,6 +60,7 @@ public class NewPasswordEntry extends DialogFragment {
 	               public void onClick(DialogInterface dialog, int id) {
 	            	   pwd = pwdField.getText().toString();
 	            	   username = usernameField.getText().toString();
+	            	   note = noteField.getText().toString();
 	            	   mListener.onDialogPositiveClick(NewPasswordEntry.this);
 	               }
 	           })
@@ -79,6 +79,10 @@ public class NewPasswordEntry extends DialogFragment {
 	
 	public String getPwd() {
 		return pwd;
+	}
+
+	public String getNote() {
+		return note;
 	}
 	
 }

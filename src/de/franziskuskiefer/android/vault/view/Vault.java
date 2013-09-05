@@ -189,11 +189,12 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 		} else if (dialogTag.equals("NewPwdEntry")) {
 			String pwd = ((NewPasswordEntry)dialog).getPwd();
 			String user = ((NewPasswordEntry)dialog).getUsername();
-			Log.d("Vault", "pwd: "+pwd);
-			Log.d("Vault", "username: "+user);
+			String note = ((NewPasswordEntry)dialog).getNote();
+//			Log.d("Vault", "pwd: "+pwd);
+//			Log.d("Vault", "username: "+user);
 			
 			// store passwords
-			dbController.addPasswordEntry(user, pwd); 
+			dbController.addPasswordEntry(note, user, pwd); 
 			
 			// XXX: refresh view with new content (actually, we get a new cursor)
 			mSectionsPagerAdapter.notifyDataSetChanged();

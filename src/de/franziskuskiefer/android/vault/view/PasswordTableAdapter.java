@@ -22,7 +22,7 @@ import de.franziskuskiefer.android.vault.R;
 public class PasswordTableAdapter extends CursorAdapter implements OnItemClickListener{
 
 	LayoutInflater inflater = null;
-	
+
 	private String username, password, context;
 
 	public PasswordTableAdapter(Context context, Cursor c, boolean autoRequery) {
@@ -36,13 +36,12 @@ public class PasswordTableAdapter extends CursorAdapter implements OnItemClickLi
 		Log.d("Database", "bindView");
 		username = arg2.getString(arg2.getColumnIndex("username"));
 		password = arg2.getString(arg2.getColumnIndex("password"));
-		context = "ToDo";
-		Log.d("Database", "username: "+username);
-		Log.d("Database", "pwd: "+password);
+		context = arg2.getString(arg2.getColumnIndex("note"));
+		
 		((TextView)arg0.findViewById(R.id.contextfield)).setText(context);
 		((TextView)arg0.findViewById(R.id.usernamefield)).setText(username);
 	}
-
+	
 	@Override
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
 		this.inflater = LayoutInflater.from(arg0);
