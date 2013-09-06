@@ -94,6 +94,7 @@ public class Database {
 		while(scheme.moveToNext()){
 			Log.d("Database", scheme.getString(1));
 		}
+		scheme.close();
 	}
 	
 	@Override
@@ -120,5 +121,17 @@ public class Database {
 	public Cursor getCursor(String name){
 		Log.d("Database", "Getting cursor for table '"+name+"'");
 		return database.rawQuery("SELECT * FROM "+name, new String[]{});
+	}
+
+	public void update(String table, int id, String[] scheme, String[] args) {
+		Log.d("Database", "Updating table entry");
+		if (scheme.length == args.length && scheme.length > 0){
+			String uString = scheme[0] + "='" + args[0];
+			for (int i = 1; i < args.length; i++) {
+				uString += "', " + scheme[i] + "='" + args[i] ;
+			}
+			uString += "' ";
+			database.execSQL("update "+table+" set " + uString + " where _id=" + id);
+		}
 	}
 }

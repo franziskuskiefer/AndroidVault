@@ -4,6 +4,7 @@ import net.sqlcipher.CrossProcessCursorWrapper;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +14,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.franziskuskiefer.android.vault.R;
 
-public class TableFragment extends Fragment {
+public class TableFragment extends Fragment implements NoticeDialogListener {
 
 	private ListView list;
 	private PasswordTableAdapter passwordTableAdapter;
@@ -49,7 +51,6 @@ public class TableFragment extends Fragment {
 					Cursor c = ((Vault)getActivity()).getDBController().getCursor("passwords");
 					passwordTableAdapter = new PasswordTableAdapter(getActivity(), c, true);
 					list.setAdapter(passwordTableAdapter);
-//					list.setOnItemClickListener(passwordTableAdapter);
 					list.setOnItemClickListener(new OnItemClickListener() {
 
 						@Override
@@ -58,17 +59,17 @@ public class TableFragment extends Fragment {
 							String username = clickedRow.getString(clickedRow.getColumnIndex("username"));
 							String password = clickedRow.getString(clickedRow.getColumnIndex("password"));
 							String note = clickedRow.getString(clickedRow.getColumnIndex("note"));
+							int id = clickedRow.getInt(clickedRow.getColumnIndex("_id"));
 							
 							Bundle pwdDialog = new Bundle();
 							pwdDialog.putString("note", note);
 							pwdDialog.putString("username", username);
 							pwdDialog.putString("password", password);
+							pwdDialog.putInt("id", id);
 							PasswordInfo passwordInfo = new PasswordInfo();
 							passwordInfo.setArguments(pwdDialog);
+							passwordInfo.setTargetFragment(TableFragment.this, 0);
 							passwordInfo.show(getActivity().getSupportFragmentManager(), "PasswordInfo");
-							
-							Log.d("Vault", "clickedRow.username: "+username);
-							Log.d("Vault", "clickedRow.pwd: "+password);
 						}
 					});
 				}
@@ -100,6 +101,28 @@ public class TableFragment extends Fragment {
 		Log.d("TableFragment", "notifyDataSetChanged");
 		// XXX: as this.passwordTableAdapter.notifyDataSetChanged() is not working I change the cursor 
 		this.passwordTableAdapter.changeCursor(((Vault)getActivity()).getDBController().getCursor("passwords"));
+	}
+
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		String note = ((PasswordInfo)dialog).getNote();
+		String user = ((PasswordInfo)dialog).getUsername();
+		String pwd = ((PasswordInfo)dialog).getPwd();
+		int id = ((PasswordInfo)dialog).getEntryId();
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Stored changes! "+note , Toast.LENGTH_SHORT).show();
+		((Vault)getActivity()).getDBController().changePasswordEntry(id, new String[]{note, user, pwd});
+		
+		// update UI
+		
+		// XXX: as this.passwordTableAdapter.notifyDataSetChanged() is not working I change the cursor 
+		this.passwordTableAdapter.changeCursor(((Vault)getActivity()).getDBController().getCursor("passwords"));
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "Cancelled changes!", Toast.LENGTH_SHORT).show();
 	}
 	
 }

@@ -85,6 +85,10 @@ public class DatabaseController {
 		public Cursor getCursor() {
 			return db.getCursor(PASSWORD_DATABASE);
 		}
+
+		public void changeEntry(Database db, int id, String[] args) {
+			db.update(PASSWORD_DATABASE, id, new String[]{NOTE, USERNAME, PASSWORD}, args);
+		}
 		
 	}
 
@@ -102,6 +106,10 @@ public class DatabaseController {
 	
 	public static void resetDB(Context c){
 		Database.dropDatabase(c);
+	}
+
+	public void changePasswordEntry(int id, String[] args) {
+		pwdTable.changeEntry(this.db, id, args);
 	}
 	
 }
