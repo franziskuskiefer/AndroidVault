@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.model;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import de.franziskuskiefer.android.vault.R;
 
@@ -19,11 +17,9 @@ import de.franziskuskiefer.android.vault.R;
  * @author Franziskus Kiefer
  *
  */
-public class PasswordTableAdapter extends CursorAdapter implements OnItemClickListener{
+public class PasswordTableAdapter extends CursorAdapter {
 
 	LayoutInflater inflater = null;
-
-	private String username, password, context;
 
 	public PasswordTableAdapter(Context context, Cursor c, boolean autoRequery) {
 		super(context, c, autoRequery);
@@ -34,12 +30,9 @@ public class PasswordTableAdapter extends CursorAdapter implements OnItemClickLi
 	@Override
 	public void bindView(View arg0, Context arg1, Cursor arg2) {
 		Log.d("Database", "bindView");
-		username = arg2.getString(arg2.getColumnIndex("username"));
-		password = arg2.getString(arg2.getColumnIndex("password"));
-		context = arg2.getString(arg2.getColumnIndex("note"));
 		
-		((TextView)arg0.findViewById(R.id.contextfield)).setText(context);
-		((TextView)arg0.findViewById(R.id.usernamefield)).setText(username);
+		((TextView)arg0.findViewById(R.id.contextfield)).setText(arg2.getString(arg2.getColumnIndex("note")));
+		((TextView)arg0.findViewById(R.id.usernamefield)).setText(arg2.getString(arg2.getColumnIndex("username")));
 	}
 	
 	@Override
@@ -47,11 +40,6 @@ public class PasswordTableAdapter extends CursorAdapter implements OnItemClickLi
 		this.inflater = LayoutInflater.from(arg0);
 		Log.d("Database", "Created newView in PasswordTableAdapter");
 		return this.inflater.inflate(R.layout.pwd_table_list_item, null);
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Log.d("Database", "onItemClick:\nuser: "+username+"\npwd: "+password);
 	}
 	
 }

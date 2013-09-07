@@ -105,19 +105,6 @@ public class Database {
 		this.database.close();
 	}
 
-	public Table getTable(String name){
-		Log.d("Database", "Getting entries from table '"+name+"'");
-		Cursor entries = database.rawQuery("SELECT * FROM "+name, new String[]{});
-		
-		Table result = null;
-		
-		if (name.equalsIgnoreCase("passwords")){
-			result = new PasswordTable(entries);
-		}
-		
-		return result;
-	}
-	
 	public Cursor getCursor(String name){
 		Log.d("Database", "Getting cursor for table '"+name+"'");
 		return database.rawQuery("SELECT * FROM "+name, new String[]{});

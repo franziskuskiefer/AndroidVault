@@ -1,5 +1,6 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.avtivities;
 
+import java.util.Arrays;
 import java.util.Vector;
 
 import android.app.AlertDialog;
@@ -7,7 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,7 +17,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import de.franziskuskiefer.android.vault.R;
+import de.franziskuskiefer.android.vault.controller.BasicFragmentActivity;
 import de.franziskuskiefer.android.vault.controller.DatabaseController;
+import de.franziskuskiefer.android.vault.dialogs.EntryClassChooser;
+import de.franziskuskiefer.android.vault.dialogs.NewPasswordEntry;
+import de.franziskuskiefer.android.vault.dialogs.NoticeDialogListener;
+import de.franziskuskiefer.android.vault.fragments.DummySectionFragment;
+import de.franziskuskiefer.android.vault.fragments.EmptyFragment;
+import de.franziskuskiefer.android.vault.fragments.TableFragment;
 
 /**
  * The main applicatoin.
@@ -25,7 +32,7 @@ import de.franziskuskiefer.android.vault.controller.DatabaseController;
  * @author Franziskus Kiefer
  *
  */
-public class Vault extends FragmentActivity implements NoticeDialogListener {
+public class Vault extends BasicFragmentActivity implements NoticeDialogListener {
 
 	private DatabaseController dbController;
 	
@@ -66,6 +73,8 @@ public class Vault extends FragmentActivity implements NoticeDialogListener {
 			mViewPager.setAdapter(mSectionsPagerAdapter);
 		} catch (Exception e){
 			Log.d("Vault", "Someone tried to login with a wrong key ... Show error and quit!");
+			Log.e("Vault", e.getLocalizedMessage());
+			Log.e("Vault", Arrays.toString(e.getStackTrace()));
 			AlertDialog.Builder builder = new AlertDialog.Builder( this );
 			builder.setMessage("Sorry, I don't know that key :(")
 			.setCancelable(false)

@@ -1,24 +1,24 @@
 package de.franziskuskiefer.android.vault.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import net.sqlcipher.Cursor;
-
 import android.content.Context;
 import android.util.Log;
 import de.franziskuskiefer.android.vault.model.Database;
-import de.franziskuskiefer.android.vault.model.PasswordTable;
-import de.franziskuskiefer.android.vault.model.Table;
 
 public class DatabaseController {
 	
-	private Database db = null;
-	private PasswordDatabaseController pwdTable = null;
-	private Vector<String> tables = new Vector<String>();
+	private static HashMap<String, DatabaseTableController> controllers = new HashMap<String, DatabaseTableController>();
 	
-	public DatabaseController() {
-		// nothing here
+	public static void registerController(String name, DatabaseTableController controller){
+		controllers.put(name, controller);
 	}
+	
+	private Database db = null;
 	
 	public DatabaseController(Context ctx, String key) {
 		init(ctx, key);
@@ -27,78 +27,36 @@ public class DatabaseController {
 	public void init(Context ctx, String key) {
 		this.db = new Database(ctx, key); 
 		
-		// Pwd Table
-		initPwdTable();
+		initTables();
 		
 		Log.d("Vault", "initialized db ...");
 	}
 	
-	private void initPwdTable() {
-		pwdTable = new PasswordDatabaseController();
-		pwdTable.createTable(this.db);
-		tables.add(pwdTable.getName());
+	private void initTables() {
+		DatabaseTableController.registerTables();
+		
+		Iterator<Entry<String, DatabaseTableController>> iterator = controllers.entrySet().iterator();
+		while (iterator.hasNext()) {
+			((DatabaseTableController)iterator.next().getValue()).createTable(this.db);
+		}
 	}
 
 	public void addPasswordEntry(String note, String user, String pwd){
-		pwdTable.addPasswordEntry(this.db, note, user, pwd);
+		controllers.get(PasswordDatabaseController.PASSWORD_DATABASE).addEntry(this.db, note, user, pwd);
 	}
 	
-	public Table getEntries(String table){
-		if(table.equals("passwords")){
-			 return pwdTable.getEntries(this.db);
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * 
-	 * Controller for the password table
-	 * 
-	 * @author franziskus
-	 *
-	 */
-	private class PasswordDatabaseController implements Util {
-		
-		private static final String NOTE = "note";
-		private static final String USERNAME = "username";
-		private static final String PASSWORD = "password";
-		private static final String PASSWORD_DATABASE = "passwords";
-		
-		public void createTable(Database db) {
-			db.createTable(PASSWORD_DATABASE, NOTE, USERNAME, PASSWORD);
-			db.printTable(PASSWORD_DATABASE);
-		}
-
-		public PasswordTable getEntries(Database db) {
-			return (PasswordTable) db.getTable(PASSWORD_DATABASE);
-		}
-
-		public String getName() {
-			return PASSWORD_DATABASE;
-		}
-
-		public void addPasswordEntry(Database db, String note, String user, String pwd){
-			db.insert(PASSWORD_DATABASE, new String[]{NOTE, USERNAME, PASSWORD}, new String[]{note, user, pwd});
-		}
-
-		public Cursor getCursor() {
-			return db.getCursor(PASSWORD_DATABASE);
-		}
-
-		public void changeEntry(Database db, int id, String[] args) {
-			db.update(PASSWORD_DATABASE, id, new String[]{NOTE, USERNAME, PASSWORD}, args);
-		}
-		
-	}
-
 	public Vector<String> getTableNames() {
-		return tables;
+		Vector<String> result = new Vector<String>();
+		Iterator<Entry<String, DatabaseTableController>> iterator = controllers.entrySet().iterator();
+		while (iterator.hasNext()) {
+			result.add(((DatabaseTableController)iterator.next().getValue()).getName());
+		}
+		return result;
 	}
 
 	public Cursor getCursor(String string) {
-		if(string.equalsIgnoreCase("passwords")){
-			return pwdTable.getCursor();
+		if(string.equalsIgnoreCase(PasswordDatabaseController.PASSWORD_DATABASE)){
+			return controllers.get(PasswordDatabaseController.PASSWORD_DATABASE).getCursor(this.db);
 		} else {
 			return null;
 		}
@@ -109,7 +67,7 @@ public class DatabaseController {
 	}
 
 	public void changePasswordEntry(int id, String[] args) {
-		pwdTable.changeEntry(this.db, id, args);
+		controllers.get(PasswordDatabaseController.PASSWORD_DATABASE).changeEntry(this.db, id, args);
 	}
 	
 }

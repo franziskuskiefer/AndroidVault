@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.fragments;
 
 import net.sqlcipher.CrossProcessCursorWrapper;
 import android.database.Cursor;
@@ -16,25 +16,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.franziskuskiefer.android.vault.R;
+import de.franziskuskiefer.android.vault.avtivities.Vault;
+import de.franziskuskiefer.android.vault.dialogs.NoticeDialogListener;
+import de.franziskuskiefer.android.vault.dialogs.PasswordInfo;
+import de.franziskuskiefer.android.vault.model.PasswordTableAdapter;
 
 public class TableFragment extends Fragment implements NoticeDialogListener {
 
 	private ListView list;
 	private PasswordTableAdapter passwordTableAdapter;
-
-	@Override
-	public void onResume() {
-		super.onResume();
-//		passwordTableAdapter.notifyDataSetChanged();
-		Log.d("Vault", "TableFragment.onResume");
-	}
-	
-	@Override
-	public void onPause() {
-		super.onPause();
-		
-		Log.d("Vault", "TableFragment.onPause");
-	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,8 +99,8 @@ public class TableFragment extends Fragment implements NoticeDialogListener {
 		String user = ((PasswordInfo)dialog).getUsername();
 		String pwd = ((PasswordInfo)dialog).getPwd();
 		int id = ((PasswordInfo)dialog).getEntryId();
-		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Stored changes! "+note , Toast.LENGTH_SHORT).show();
+		
+		Toast.makeText(getActivity(), "Stored changes!" , Toast.LENGTH_SHORT).show();
 		((Vault)getActivity()).getDBController().changePasswordEntry(id, new String[]{note, user, pwd});
 		
 		// update UI

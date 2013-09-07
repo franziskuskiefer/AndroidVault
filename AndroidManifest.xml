@@ -22,19 +22,21 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".view.Setup"
+            android:name="de.franziskuskiefer.android.vault.avtivities.Setup"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".controller.MainActivity"
+            android:name="de.franziskuskiefer.android.vault.avtivities.MainActivity"
             android:label="@string/app_name"
-            android:clearTaskOnLaunch="true" android:noHistory="true">
+            android:clearTaskOnLaunch="true"
+            android:noHistory="true"
+            android:finishOnTaskLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.Vault"
+        <activity android:name="de.franziskuskiefer.android.vault.avtivities.Vault"
             android:label="@string/app_name" >
             
         </activity>

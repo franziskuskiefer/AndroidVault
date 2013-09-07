@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

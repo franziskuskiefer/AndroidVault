@@ -1,4 +1,4 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.dialogs;
 
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;

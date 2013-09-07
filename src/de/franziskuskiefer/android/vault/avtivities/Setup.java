@@ -1,7 +1,6 @@
-package de.franziskuskiefer.android.vault.view;
+package de.franziskuskiefer.android.vault.avtivities;
 
 import net.sourceforge.zbar.Symbol;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -18,9 +17,10 @@ import com.dm.zbar.android.scanner.ZBarConstants;
 import com.dm.zbar.android.scanner.ZBarScannerActivity;
 
 import de.franziskuskiefer.android.vault.R;
+import de.franziskuskiefer.android.vault.controller.BasicActivity;
 import de.franziskuskiefer.android.vault.controller.DatabaseController;
 
-public class Setup extends Activity {
+public class Setup extends BasicActivity {
 
 	private static final int ZBAR_QR_SCANNER_REQUEST = 1;
 	

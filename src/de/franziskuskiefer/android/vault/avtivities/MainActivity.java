@@ -1,15 +1,14 @@
-package de.franziskuskiefer.android.vault.controller;
+package de.franziskuskiefer.android.vault.avtivities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Log;
-import de.franziskuskiefer.android.vault.view.Setup;
-import de.franziskuskiefer.android.vault.view.Vault;
+import de.franziskuskiefer.android.vault.controller.BasicActivity;
+import de.franziskuskiefer.android.vault.controller.Util;
 
-public class MainActivity extends Activity implements Util, OnSharedPreferenceChangeListener{
+public class MainActivity extends BasicActivity implements Util, OnSharedPreferenceChangeListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,6 @@ public class MainActivity extends Activity implements Util, OnSharedPreferenceCh
 			startActivity(myIntent);
 		}
 		
-
 	}
 	
 	@Override
@@ -55,6 +53,13 @@ public class MainActivity extends Activity implements Util, OnSharedPreferenceCh
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+//		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 	
 }
