@@ -1,19 +1,32 @@
 package de.franziskuskiefer.android.vault.avtivities;
 
+import java.security.SecureRandom;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import de.franziskuskiefer.android.vault.controller.BasicActivity;
+import de.franziskuskiefer.android.vault.controller.AppPreferences;
 import de.franziskuskiefer.android.vault.controller.Util;
 
-public class MainActivity extends BasicActivity implements Util, OnSharedPreferenceChangeListener{
+public class MainActivity extends Activity implements Util, OnSharedPreferenceChangeListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		// check salt and generate new if necessary
+		AppPreferences prefs = new AppPreferences(getApplicationContext());
+		String s = prefs.getSalt();
+		if (s == null || s.isEmpty() || s.equals("")){
+			byte[] salt = new SecureRandom().generateSeed(4);
+			s = Base64.encodeToString(salt, Base64.DEFAULT);
+			prefs.setSalt(s);
+		}
+		
 		// start vault or setup
 		if (EMULATOR_TESTING){ // or testing
 			Intent myIntent = new Intent(getBaseContext(), Vault.class);
@@ -40,13 +53,6 @@ public class MainActivity extends BasicActivity implements Util, OnSharedPrefere
 		Log.d("MainActivity", "onPause");
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onPause();
-		
-		finish();
-	}
-
 	/**
 	 * SharedPreferences Listener
 	 */
@@ -58,8 +64,6 @@ public class MainActivity extends BasicActivity implements Util, OnSharedPrefere
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
-//		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 	
 }

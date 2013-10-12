@@ -199,11 +199,9 @@ public class Vault extends BasicFragmentActivity implements NoticeDialogListener
 			String pwd = ((NewPasswordEntry)dialog).getPwd();
 			String user = ((NewPasswordEntry)dialog).getUsername();
 			String note = ((NewPasswordEntry)dialog).getNote();
-//			Log.d("Vault", "pwd: "+pwd);
-//			Log.d("Vault", "username: "+user);
 			
 			// store passwords
-			dbController.addPasswordEntry(note, user, pwd); 
+			dbController.addPasswordEntry(new String[]{note, user, pwd}); 
 			
 			// XXX: refresh view with new content (actually, we get a new cursor)
 			mSectionsPagerAdapter.notifyDataSetChanged();
@@ -219,13 +217,6 @@ public class Vault extends BasicFragmentActivity implements NoticeDialogListener
 		super.onResumeFragments();
 		
 		Log.d("Vault", "onResumeFragments");
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		Log.d("Vault", "onResume");
 	}
 	
 	@Override

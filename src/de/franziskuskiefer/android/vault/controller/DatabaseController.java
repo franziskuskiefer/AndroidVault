@@ -41,8 +41,8 @@ public class DatabaseController {
 		}
 	}
 
-	public void addPasswordEntry(String note, String user, String pwd){
-		controllers.get(PasswordDatabaseController.PASSWORD_DATABASE).addEntry(this.db, note, user, pwd);
+	public void addPasswordEntry(String[] args){
+		controllers.get(PasswordDatabaseController.PASSWORD_DATABASE).addEntry(this.db, args);
 	}
 	
 	public Vector<String> getTableNames() {

@@ -1,6 +1,21 @@
 package de.franziskuskiefer.android.vault.avtivities;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 import net.sourceforge.zbar.Symbol;
+
+import org.bouncycastle.util.encoders.Base64;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,12 +26,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dm.zbar.android.scanner.ZBarConstants;
 import com.dm.zbar.android.scanner.ZBarScannerActivity;
 
 import de.franziskuskiefer.android.vault.R;
+import de.franziskuskiefer.android.vault.controller.AppPreferences;
 import de.franziskuskiefer.android.vault.controller.BasicActivity;
 import de.franziskuskiefer.android.vault.controller.DatabaseController;
 
@@ -90,10 +107,102 @@ public class Setup extends BasicActivity {
 		}
 	}
 	
-	private void onUnlock(String key){
-		Intent myIntent = new Intent(getBaseContext(), Vault.class);
-		myIntent.putExtra("key", key);
-		startActivity(myIntent);
+	private void onUnlock(final String key){
+		
+		// check the password first
+		final EditText inputPwd = new EditText(this);
+		new AlertDialog.Builder(this)
+			.setTitle("Password")
+			.setMessage("Password please")
+			.setView(inputPwd)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					
+					// create combined key
+					String pwd = inputPwd.getText().toString();
+					byte[] salt = Base64.decode(new AppPreferences(getApplicationContext()).getSalt());
+					byte[] p = makePwdKey(pwd, salt);
+					byte[] k = hexStringToByteArray(key);
+					byte[] combinedKey = xore(p, k);
+
+					// open the vault
+					Intent myIntent = new Intent(getBaseContext(), Vault.class);
+					myIntent.putExtra("key", Arrays.toString(combinedKey));
+					startActivity(myIntent);
+
+					// unlocked
+					new AppPreferences(getApplicationContext()).saveAppStatus(true);
+				}
+			}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					canceled();
+				}
+			}).show();
+	}
+	
+	private void wrongPassword(){
+		Toast.makeText(this, "Sorry, wrong password", Toast.LENGTH_SHORT).show();
+	}
+	
+	private void canceled(){
+		Toast.makeText(this, "Canceled login", Toast.LENGTH_SHORT).show();
+	}
+	
+	private byte[] makePwdKey(String pwd, byte[] salt){
+		try {
+			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			KeySpec ks = new PBEKeySpec(pwd.toCharArray(),salt,1024,128);
+			SecretKey s = f.generateSecret(ks);
+			
+			// need an additional sha256 as we do not have PBKDF2WithHmacSHA2 without additional libs
+			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			
+			return sha256.digest(s.getEncoded());
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("MainActivity", e.getLocalizedMessage(), e);
+		} catch (InvalidKeySpecException e) {
+			Log.e("MainActivity", e.getLocalizedMessage(), e);
+		}
+		
+		return null;
+	}
+	
+	private byte[] xore(byte[] b1, byte[] b2){
+		int l = b1.length > b2.length ? b1.length : b2.length;
+		byte[] result = new byte[l];
+		for (int i = 0; i < l; ++i){
+			if (i < b1.length && i < b2.length)
+				result[i] = (byte) (b1[i] ^ b2[i]);
+			else if (i < b1.length && i >= b2.length)
+				result[i] = b1[i];
+			else if (i >= b1.length && i < b2.length)
+				result[i] = b2[i];
+		}
+		
+		return result;
+	}
+	
+	private byte[] xor(byte[] b1, byte[] b2){
+		if (b1.length == b2.length) {
+			byte[] result = new byte[b1.length];
+			int i = 0;
+			for (byte b : b1)
+				result[i] = (byte) (b ^ b2[i++]);
+			
+			return result;
+		}
+		
+		return null;
+	}
+	
+	private static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
 	}
 	
 	public void launchQRScanner() {

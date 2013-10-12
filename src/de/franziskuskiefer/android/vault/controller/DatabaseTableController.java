@@ -23,6 +23,6 @@ public abstract class DatabaseTableController {
 
 	public abstract void changeEntry(Database db, int id, String[] args);
 
-	public abstract void addEntry(Database db, String note, String user, String pwd);
+	public abstract void addEntry(Database db, String[] args);
 
 }

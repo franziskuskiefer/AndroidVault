@@ -35,8 +35,8 @@ class PasswordDatabaseController extends DatabaseTableController implements Util
 		db.update(PASSWORD_DATABASE, id, new String[]{NOTE, USERNAME, PASSWORD}, args);
 	}
 	
-	public void addEntry(Database db, String note, String user, String pwd){
-		db.insert(PASSWORD_DATABASE, new String[]{NOTE, USERNAME, PASSWORD}, new String[]{note, user, pwd});
+	public void addEntry(Database db, String[] args){
+		db.insert(PASSWORD_DATABASE, new String[]{NOTE, USERNAME, PASSWORD}, args);
 	}
 	
 }

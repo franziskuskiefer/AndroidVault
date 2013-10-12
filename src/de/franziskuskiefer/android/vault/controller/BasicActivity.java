@@ -25,4 +25,11 @@ public class BasicActivity extends Activity {
 		
 		Log.d("MainActivity", "(A)onUserLeaveHint ...");
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Log.d("MainActivity", "(A)onResume ...");
+	}
 }
