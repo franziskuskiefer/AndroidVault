@@ -27,7 +27,7 @@ import de.franziskuskiefer.android.vault.fragments.EmptyFragment;
 import de.franziskuskiefer.android.vault.fragments.TableFragment;
 
 /**
- * The main applicatoin.
+ * The main application.
  * 
  * @author Franziskus Kiefer
  *

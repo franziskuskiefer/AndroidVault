@@ -24,13 +24,18 @@ import de.franziskuskiefer.android.vault.model.PasswordTableAdapter;
 public class TableFragment extends Fragment implements NoticeDialogListener {
 
 	private ListView list;
+	
+	// TODO: TableAdapter need an interface
 	private PasswordTableAdapter passwordTableAdapter;
+	private PasswordTableAdapter pgpTableAdapter; // FIXME: copy of passwords atm.
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		String category = getArguments().getString("category");
-		if (category.equalsIgnoreCase("passwords")){
+		
+		// fill table depending on category
+		if (category.equalsIgnoreCase("passwords")){ // TODO: extract string
 			View frag = View.inflate(getActivity(), R.layout.pwd_list, null);
 			list = (ListView) frag.findViewById(R.id.lv);
 
@@ -41,6 +46,43 @@ public class TableFragment extends Fragment implements NoticeDialogListener {
 					Cursor c = ((Vault)getActivity()).getDBController().getCursor("passwords");
 					passwordTableAdapter = new PasswordTableAdapter(getActivity(), c, true);
 					list.setAdapter(passwordTableAdapter);
+					list.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+							CrossProcessCursorWrapper clickedRow = (CrossProcessCursorWrapper) list.getItemAtPosition(arg2);
+							String username = clickedRow.getString(clickedRow.getColumnIndex("username"));
+							String password = clickedRow.getString(clickedRow.getColumnIndex("password"));
+							String note = clickedRow.getString(clickedRow.getColumnIndex("note"));
+							int id = clickedRow.getInt(clickedRow.getColumnIndex("_id"));
+							
+							Bundle pwdDialog = new Bundle();
+							pwdDialog.putString("note", note);
+							pwdDialog.putString("username", username);
+							pwdDialog.putString("password", password);
+							pwdDialog.putInt("id", id);
+							PasswordInfo passwordInfo = new PasswordInfo();
+							passwordInfo.setArguments(pwdDialog);
+							passwordInfo.setTargetFragment(TableFragment.this, 0);
+							passwordInfo.show(getActivity().getSupportFragmentManager(), "PasswordInfo");
+						}
+					});
+				}
+			});
+
+			Log.d("Vault", "Create Table Fragment");
+			return frag;
+		} else if (category.equalsIgnoreCase("pgp")){ // TODO: extract string
+			View frag = View.inflate(getActivity(), R.layout.pgp_list, null);
+			list = (ListView) frag.findViewById(R.id.lv);
+
+			// query db in its own thread
+			new Handler().post(new Runnable() {
+				@Override
+				public void run() {
+					Cursor c = ((Vault)getActivity()).getDBController().getCursor("pgp");
+					pgpTableAdapter = new PasswordTableAdapter(getActivity(), c, true);
+					list.setAdapter(pgpTableAdapter);
 					list.setOnItemClickListener(new OnItemClickListener() {
 
 						@Override

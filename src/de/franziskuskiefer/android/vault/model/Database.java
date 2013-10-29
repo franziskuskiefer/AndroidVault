@@ -36,6 +36,10 @@ public class Database {
 		Log.d("Database", "opened database");
 	}
 
+	/**
+	 * create a new DB encrypted with key
+	 * @param key as {@link String}
+	 */
 	private void createDB(String key) {
 		databaseFile.mkdirs();
 		databaseFile.delete();

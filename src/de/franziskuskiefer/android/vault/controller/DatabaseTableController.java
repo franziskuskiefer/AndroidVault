@@ -8,11 +8,15 @@ public abstract class DatabaseTableController {
 	
 	// singleton pwdInstance
 	private static PasswordDatabaseController pwdInstance = new PasswordDatabaseController();
+	
+	// singleton pgpInstance
+	private static PGPDatabaseController pgpInstance = new PGPDatabaseController();
 
 	// register with DatabaseController
 	public static void registerTables() {
 		Log.d("Database", "register db pwd controller ...");
 		DatabaseController.registerController(pwdInstance.getName(), pwdInstance);
+		DatabaseController.registerController(pgpInstance.getName(), pgpInstance);
 	}
 
 	public abstract void createTable(Database db);
