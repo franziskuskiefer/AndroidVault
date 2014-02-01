@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- some shadow -->
+    <item android:duration="400">
+        <shape
+            android:dither="true"
+            android:shape="rectangle" >
+            <corners android:radius="2dp" />
+
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+
+    <!-- card -->
+    <item
+        android:bottom="8px"
+        android:duration="400"
+        android:right="8px">
+        <shape
+            android:dither="true"
+            android:shape="rectangle" >
+            <corners android:radius="2dp" />
+
+            <solid android:color="#ee1188" />
+            
+            <padding
+                android:bottom="4dp"
+                android:left="4dp"
+                android:right="4dp"
+                android:top="4dp" />
+        </shape>
+    </item>
+
+</animation-list>

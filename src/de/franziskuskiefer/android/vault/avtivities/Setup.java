@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -116,13 +115,18 @@ public class Setup extends BasicActivity {
 		inputPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		new AlertDialog.Builder(this)
 			.setTitle("Password")
-			.setMessage("Password please")
+			.setMessage("Password please ...")
 			.setView(inputPwd)
 			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					
 					// create combined key
-					String pwd = inputPwd.getText().toString();
+					String pwd = "";
+					if (inputPwd.getText() != null){
+						pwd = inputPwd.getText().toString();
+					} else {
+						// user entered an empty password -> use it ...
+					}
 					byte[] salt = Base64.decode(new AppPreferences(getApplicationContext()).getSalt());
 					byte[] p = makePwdKey(pwd, salt);
 					byte[] k = hexStringToByteArray(key);
