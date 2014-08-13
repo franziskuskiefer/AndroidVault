@@ -5,4 +5,4 @@ The Android Vault allows you to securely store sensitive data on your Android ph
 
 
 #### Note
-**Under heavy development -> not safe to use!**
+**Under development -> not safe to use!**
